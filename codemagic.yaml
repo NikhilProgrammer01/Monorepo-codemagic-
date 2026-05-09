@@ -19,14 +19,14 @@ workflows:
       - name: Build Android (APK)
         script: |
           cd android && ./gradlew assembleRelease
-      - name: Build iOS (IPA)
-        script: |
-          # Note: iOS requires code signing setup in Codemagic UI to work
-          xcode-project build-ipa --workspace ios/*.xcworkspace --scheme demoexpo
-    artifacts:
-      - android/app/build/outputs/apk/release/*.apk
-      - ios/build/remote/ipa/*.ipa
-    publishing:
-      email:
-        recipients:
-          - your-email@example.com
+    #   - name: Build iOS (IPA)
+    #     script: |
+    #       # Note: iOS requires code signing setup in Codemagic UI to work
+    #       xcode-project build-ipa --workspace ios/*.xcworkspace --scheme demoexpo
+    # artifacts:
+    #   - android/app/build/outputs/apk/release/*.apk
+    #   - ios/build/remote/ipa/*.ipa
+    # publishing:
+    #   email:
+    #     recipients:
+    #       - your-email@example.com
