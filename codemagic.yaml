@@ -1,24 +1,43 @@
 workflows:
   expo-app-workflow:
     name: DemoExpo Build
-    instance_type: mac_mini_m2  # Required for iOS builds
+    instance_type: mac_mini_m2 
     working_directory: apps/demoexpo
+    
+    # This section enables automatic builds on push
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: 'main'
+          include: true
+          
     environment:
-      node: latest
+      node: 20 # Using a specific version is more stable than "latest"
       vars:
-        PACKAGE_NAME: "com.nikhil.demoexpo" # Change this
+        PACKAGE_NAME: "com.nikhil.demoexpo"
+    
     scripts:
       - name: Install dependencies
         script: |
-          npm install -g expo-cli
-          pnpm install # or npm install
+          npm install -g pnpm
+          pnpm install
       - name: Expo prebuild
         script: |
-          # This generates the /ios and /android folders automatically on the build server
-          npx expo prebuild --platform all
+          npx expo prebuild --platform android
       - name: Build Android (APK)
         script: |
           cd android && ./gradlew assembleRelease
+          
+    # This ensures you can actually download the file after it finishes
+    artifacts:
+      - android/app/build/outputs/apk/release/*.apk
+
+    publishing:
+      email:
+        recipients:
+          - nicksalvatore000@gmail.com # Updated from your screenshot
+
     #   - name: Build iOS (IPA)
     #     script: |
     #       # Note: iOS requires code signing setup in Codemagic UI to work
